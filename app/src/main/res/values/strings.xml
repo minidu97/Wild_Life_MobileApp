@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Wild Life</string>
+
+    <string-array name="items">
+        <item>All</item>
+        <item>Tiger</item>
+        <item>Elephant</item>
+    </string-array>
 </resources>

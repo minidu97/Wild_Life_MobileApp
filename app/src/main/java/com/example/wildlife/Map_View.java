@@ -25,8 +25,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Map_View extends AppCompatActivity {
 
@@ -35,18 +41,18 @@ public class Map_View extends AppCompatActivity {
     LocationRequest locationRequest;
     GoogleMap Mmap;
     ArrayList<LatLng>arrayList = new ArrayList<LatLng>();
-    LatLng kalutara = new LatLng(6.5854,79.9607);
-    LatLng Mathugama = new LatLng(6.5219,80.1137);
-    LatLng panadura = new LatLng(6.7106,79.9074);
-    LatLng colombo = new LatLng(6.9271,79.8612);
-    LatLng Gampaha = new LatLng(7.0840,80.0098);
     private static final String TAG = "Map_View";
+    private DatabaseReference reference;
+    public String text1;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
+
+        String text = getIntent().getStringExtra("selectedOne");
+
 
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.Google_Map);
         client = LocationServices.getFusedLocationProviderClient(Map_View.this);
@@ -56,18 +62,74 @@ public class Map_View extends AppCompatActivity {
         locationRequest.setFastestInterval(500);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        arrayList.add(kalutara);
-        arrayList.add(Mathugama);
-        arrayList.add(panadura);
-        arrayList.add(colombo);
-        arrayList.add(Gampaha);
+        final Calendar c = Calendar.getInstance();
+        int Year = c.get(Calendar.YEAR);
+        int Month = c.get(Calendar.MONTH);
+        int Month1 = Month +1;
+        int Day = c.get(Calendar.DAY_OF_MONTH);
 
-        if (ActivityCompat.checkSelfPermission(Map_View.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Latitude : sample test");
-            getCurrentLocation();
-        } else {
-            ActivityCompat.requestPermissions(Map_View.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-        }
+        System.out.println("year is " +Year);
+        System.out.println(Month1);
+        System.out.println(Day);
+
+            reference = FirebaseDatabase.getInstance().getReference("animals/" + Year + "/" + Month1 + "/12" );
+            System.out.println(reference);
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists())
+                    {
+                        if(text.equals("Tiger"))
+                        {
+                            text1 = "[{'id': 1, 'name': 'Tiger'}]";
+                            for (DataSnapshot ds : snapshot.getChildren()){
+                                if(ds.child("Animal").getValue().toString().equals(text1))
+                                {
+                                    Double latitude = Double.parseDouble(ds.child("Latitude").getValue().toString());
+                                    Double longitude = Double.parseDouble(ds.child("Longitude").getValue().toString());
+                                    arrayList.add(new LatLng(latitude,longitude));
+                                }
+                            }
+                        }
+                        else if(text.equals("Elephant"))
+                        {
+                            text1 = "[{'id': 1, 'name': 'Elephant'}]";
+                            for (DataSnapshot ds : snapshot.getChildren()){
+                                if(ds.child("Animal").getValue().toString().equals(text1))
+                                {
+                                    Double latitude = Double.parseDouble(ds.child("Latitude").getValue().toString());
+                                    Double longitude = Double.parseDouble(ds.child("Longitude").getValue().toString());
+                                    arrayList.add(new LatLng(latitude,longitude));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (DataSnapshot ds : snapshot.getChildren()){
+                                Double latitude = Double.parseDouble(ds.child("Latitude").getValue().toString());
+                                Double longitude = Double.parseDouble(ds.child("Longitude").getValue().toString());
+                                arrayList.add(new LatLng(latitude,longitude));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        System.out.println("data Doesn't exists");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+
+            if (ActivityCompat.checkSelfPermission(Map_View.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation();
+            } else {
+                ActivityCompat.requestPermissions(Map_View.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+            }
 
     }
 
