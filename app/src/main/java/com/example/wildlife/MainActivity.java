@@ -124,11 +124,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     else{
                         user.sendEmailVerification();
                         Toast.makeText(MainActivity.this, "Check your Email to Verify Your Account", Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.GONE);
+                        editTextEmail.setText(""); editTextPassword.setText("");
                     }
 
                 }
                 else{
                     Toast.makeText(MainActivity.this, "Failed to login", Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                    editTextEmail.setText(""); editTextPassword.setText("");
                 }
             }
         });

@@ -27,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 public class Register_User extends AppCompatActivity implements View.OnClickListener{
 
     private TextView  register;
-    private EditText editTextName, editTextEmail, editTextPassword, editTextCode;
+    private EditText editTextName, editTextEmail, editTextPassword, editTextCode, editTextConfPw;
     private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
@@ -45,6 +45,8 @@ public class Register_User extends AppCompatActivity implements View.OnClickList
         editTextName = (EditText) findViewById(R.id.Name);
         editTextEmail = (EditText) findViewById(R.id.Email);
         editTextPassword = (EditText) findViewById(R.id.Password);
+        editTextConfPw = (EditText) findViewById(R.id.confPassword);
+
         editTextCode = (EditText) findViewById(R.id.Code);
         progressBar = (ProgressBar) findViewById(R.id.Progressbar);
     }
@@ -63,6 +65,7 @@ public class Register_User extends AppCompatActivity implements View.OnClickList
         String Name = editTextName.getText().toString().trim();
         String Email = editTextEmail.getText().toString().trim();
         String Password = editTextPassword.getText().toString().trim();
+        String ConfPassword = editTextConfPw.getText().toString().trim();
         String Code = editTextCode.getText().toString().trim();
 
 
@@ -91,6 +94,12 @@ public class Register_User extends AppCompatActivity implements View.OnClickList
             return;
         }
 
+        if(ConfPassword.isEmpty()){
+            editTextPassword.setError("Password Confirmation is Required!");
+            editTextPassword.requestFocus();
+            return;
+        }
+
         if(Password.length()<6){
             editTextPassword.setError("Minimum Password Length Should be 6 characters");
             editTextPassword.requestFocus();
@@ -100,6 +109,13 @@ public class Register_User extends AppCompatActivity implements View.OnClickList
         if(Code.isEmpty()){
             editTextCode.setError("Code is Required!");
             editTextCode.requestFocus();
+            return;
+        }
+
+        if(!ConfPassword.equals(Password))
+        {
+            editTextPassword.setError("Password Didn't Match!");
+            editTextPassword.requestFocus();
             return;
         }
 
@@ -124,10 +140,12 @@ public class Register_User extends AppCompatActivity implements View.OnClickList
                                                 if(task.isSuccessful()){
                                                     Toast.makeText(Register_User.this, "User has been Registered Successfully", Toast.LENGTH_LONG).show();
                                                     progressBar.setVisibility(View.GONE);
+                                                    startActivity(new Intent(Register_User.this,MainActivity.class));
                                                 }
                                                 else{
                                                     Toast.makeText(Register_User.this, "Registration Failed -01", Toast.LENGTH_LONG).show();
                                                     progressBar.setVisibility(View.GONE);
+                                                    editTextName.setText(""); editTextEmail.setText(""); editTextPassword.setText(""); editTextCode.setText(""); editTextConfPw.setText("");
                                                 }
 
                                             }
@@ -137,6 +155,7 @@ public class Register_User extends AppCompatActivity implements View.OnClickList
                                     else{
                                         Toast.makeText(Register_User.this, "Registration Failed -02", Toast.LENGTH_LONG).show();
                                         progressBar.setVisibility(View.GONE);
+                                        editTextName.setText(""); editTextEmail.setText(""); editTextPassword.setText(""); editTextCode.setText(""); editTextConfPw.setText("");
                                     }
                                 }
                             });
@@ -144,6 +163,7 @@ public class Register_User extends AppCompatActivity implements View.OnClickList
                 else{
                     Toast.makeText(Register_User.this, "Not a valid Employee Id", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.GONE);
+                    editTextName.setText(""); editTextEmail.setText(""); editTextPassword.setText(""); editTextCode.setText(""); editTextConfPw.setText("");
                 }
             }
 

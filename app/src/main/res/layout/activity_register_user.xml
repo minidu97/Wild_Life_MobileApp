@@ -11,7 +11,7 @@
         android:id="@+id/logo"
         android:layout_width="278dp"
         android:layout_height="68dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="sans-serif"
         android:text="Wild Life"
         android:textAlignment="center"
@@ -27,7 +27,7 @@
         android:id="@+id/Name"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="60dp"
         android:ems="10"
         android:hint="Name"
         android:inputType="text"
@@ -58,12 +58,25 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Password"
-        android:inputType="textEmailAddress"
         android:textSize="24sp"
+        android:inputType="textPassword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/Email"
         />
+
+    <EditText
+        android:id="@+id/confPassword"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:textSize="24sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Password" />
 
     <EditText
         android:id="@+id/Code"
@@ -71,13 +84,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ems="10"
-        android:hint="Code"
+        android:hint="Employee ID"
         android:inputType="text"
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Password"
-        />
+        app:layout_constraintTop_toBottomOf="@id/confPassword" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/Register"
