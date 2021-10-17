@@ -31,8 +31,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Console;
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Map_View extends AppCompatActivity {
 
@@ -41,6 +45,8 @@ public class Map_View extends AppCompatActivity {
     LocationRequest locationRequest;
     GoogleMap Mmap;
     ArrayList<LatLng>arrayList = new ArrayList<LatLng>();
+    ArrayList<String> Namearray = new ArrayList<String>();
+
     private static final String TAG = "Map_View";
     private DatabaseReference reference;
     public String text1;
@@ -63,6 +69,7 @@ public class Map_View extends AppCompatActivity {
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         final Calendar c = Calendar.getInstance();
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         int Year = c.get(Calendar.YEAR);
         int Month = c.get(Calendar.MONTH);
         int Month1 = Month +1;
@@ -88,6 +95,9 @@ public class Map_View extends AppCompatActivity {
                                     Double latitude = Double.parseDouble(ds.child("Latitude").getValue().toString());
                                     Double longitude = Double.parseDouble(ds.child("Longitude").getValue().toString());
                                     arrayList.add(new LatLng(latitude,longitude));
+                                    String Names = ds.child("Animal").getValue().toString();
+                                    Namearray.add(Names);
+
                                 }
                             }
                         }
@@ -100,6 +110,8 @@ public class Map_View extends AppCompatActivity {
                                     Double latitude = Double.parseDouble(ds.child("Latitude").getValue().toString());
                                     Double longitude = Double.parseDouble(ds.child("Longitude").getValue().toString());
                                     arrayList.add(new LatLng(latitude,longitude));
+                                    String Names = ds.child("Animal").getValue().toString();
+                                    Namearray.add(Names);
                                 }
                             }
                         }
@@ -109,6 +121,8 @@ public class Map_View extends AppCompatActivity {
                                 Double latitude = Double.parseDouble(ds.child("Latitude").getValue().toString());
                                 Double longitude = Double.parseDouble(ds.child("Longitude").getValue().toString());
                                 arrayList.add(new LatLng(latitude,longitude));
+                                String Names = ds.child("Animal").getValue().toString();
+                                Namearray.add(Names);
                             }
                         }
                     }
@@ -217,7 +231,7 @@ public class Map_View extends AppCompatActivity {
                                 //LatLng latLng = new LatLng(location.getLatitude(),location.getLatitude());
                                 LatLng latLng = new LatLng(7.8731,80.7718);
                                 //MarkerOptions options = new MarkerOptions().position(latLng).title("My Current Location");
-                                MarkerOptions options = new MarkerOptions().position(arrayList.get(i)).title("My Current Location");
+                                MarkerOptions options = new MarkerOptions().position(arrayList.get(i)).title(Namearray.get(i));
                                 Mmap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,8));
                                 Mmap.addMarker(options);
                                 //Log.d(TAG, "Latitude : "+ location.getLatitude());
