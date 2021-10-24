@@ -79,7 +79,7 @@ public class Map_View extends AppCompatActivity {
         System.out.println(Month1);
         System.out.println(Day);
 
-            reference = FirebaseDatabase.getInstance().getReference("animals/" + Year + "/" + Month1 + "/12" );
+            reference = FirebaseDatabase.getInstance().getReference("animals/" + Year + "/" + Month1 + "/18" );
             System.out.println(reference);
             reference.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -88,7 +88,7 @@ public class Map_View extends AppCompatActivity {
                     {
                         if(text.equals("Tiger"))
                         {
-                            text1 = "[{'id': 1, 'name': 'Tiger'}]";
+                            text1 = "[{'id': 2, 'name': 'Tiger'}]";
                             for (DataSnapshot ds : snapshot.getChildren()){
                                 if(ds.child("Animal").getValue().toString().equals(text1))
                                 {
